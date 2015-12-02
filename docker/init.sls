@@ -13,11 +13,6 @@ docker package dependencies:
       - lxc
       - python-apt
 
-{%- if grains["oscodename"]|lower == 'jessie' %}
-docker package repository:
-  pkgrepo.managed:
-    - name: deb http://http.debian.net/debian jessie-backports main
-{%- else %}
 {%- if "version" in docker and docker.version < '1.7.1' %}
 docker package repository:
   pkgrepo.managed:
@@ -42,7 +37,6 @@ docker package repository:
     - keyserver: keyserver.ubuntu.com
     - file: /etc/apt/sources.list.d/docker.list
     - refresh_db: True
-{%- endif %}
     - require_in:
       - pkg: docker package
     - require:
