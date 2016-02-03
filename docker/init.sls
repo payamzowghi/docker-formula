@@ -59,6 +59,7 @@ docker package:
     - require:
       - pkg: docker package dependencies
       - pkgrepo: docker package repository
+      - file: docker-config
 
 docker-config:
   file.managed:
@@ -74,10 +75,13 @@ docker-service:
     - enable: True
     - watch:
       - file: /etc/default/docker
+      - pkg: docker package
     {% if "process_signature" in docker %}
     - sig: {{ docker.process_signature }}
     {% endif %}
 
+
+{% if docker.install_docker_py %}
 docker-py requirements:
   pkg.installed:
     - name: python-pip
@@ -96,3 +100,4 @@ docker-py:
       - pkg: docker package
       - pip: docker-py requirements
     - reload_modules: True
+{% endif %}
